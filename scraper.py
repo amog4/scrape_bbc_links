@@ -7,7 +7,9 @@ import time
 import pandas as pd
 from bs4 import BeautifulSoup
 from openpyxl import load_workbook
+import os,sys
 
+driver_loc = os.environ.get("CHROME_DRIVER_LOC")
 class Scraper():
 
     def __init__(self,driver):
@@ -42,7 +44,7 @@ class Scraper():
 
    
 
-scraper =  Scraper(driver = r'C:\Users\saiam\OneDrive\Desktop\chrome_driver\chromedriver.exe')
+scraper =  Scraper(driver = driver_loc)
 d = scraper.launch_driver()
 scraper.open_website(website='https://www.bbc.com/')
 get_page_source = scraper.get_page_source()
@@ -83,16 +85,11 @@ for index, row in df.iterrows():
                 if index in title:
                     title[index].expend([x])
                 else:
-                    title[index] = [x]
-            
-          
+                    title[index] = [x]     
             
         except:
             pass
             
-
-
-
 
 df_text =  pd.DataFrame({'url':url_main,'title':title,'text':text_main})
 df_text['title'] = df_text['title'].apply(lambda x : x if x else 'Not Available')
@@ -102,9 +99,5 @@ df_text.to_excel(writer,sheet_name= 'links_text',index=False)
 writer.save()
 writer.close()
         
-
-
-
-
 time.sleep(10)
 scraper.close()
