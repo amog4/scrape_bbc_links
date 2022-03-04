@@ -9,7 +9,8 @@ from bs4 import BeautifulSoup
 from openpyxl import load_workbook
 import os,sys
 
-driver_loc = os.environ.get("CHROME_DRIVER_LOC")
+driver_loc = os.environ.get("CHROME_DRIVER_LOC",r"C:\Users\saiam\OneDrive\Desktop\chrome_driver\chromedriver.exe")
+
 class Scraper():
 
     def __init__(self,driver):
@@ -57,7 +58,7 @@ for h in links:
 
 df = pd.DataFrame({'ref':list(ref)})
 workbook = load_workbook('bbc_links.xlsx')
-writer  =  pd.ExcelWriter('bbc.xlsx',engine = 'openpyxl')
+writer  =  pd.ExcelWriter('bbc_links.xlsx',engine = 'openpyxl')
 writer.book = workbook 
 df.to_excel(writer, sheet_name = 'links',index=False)
 
@@ -66,8 +67,11 @@ title = {}
 text_main = {}
 url_main = {}
 for index, row in df.iterrows():
-    if  row['ref'].startswith('/news' ) and any(i.isdigit() for i in  row['ref'])  and 'www.bbc.com' not in row['ref'] :
-        url = 'https://www.bbc.com' + row['ref']
+    if  (row['ref'].startswith('/news' ) or 'www.bbc.com/news/' in row['ref'] ) and any(i.isdigit() for i in  row['ref']) :
+        if 'www.bbc.com' not in row['ref']:
+            url = 'https://www.bbc.com' + row['ref']
+        elif 'www.bbc.com' in row['ref']:
+            url =  row['ref']
         urls.append(url)
         scraper.open_website(website=url)
         get_page_source_article = scraper.get_page_source()
