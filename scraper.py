@@ -11,6 +11,9 @@ import os,sys
 
 driver_loc = os.environ.get("CHROME_DRIVER_LOC",r"C:\Users\saiam\OneDrive\Desktop\chrome_driver\chromedriver.exe")
 
+driver_loc = os.environ.get("CHROME_DRIVER_LOC")
+driver_loc
+
 class Scraper():
 
     def __init__(self,driver):
@@ -22,6 +25,8 @@ class Scraper():
         options.add_argument("start-maximized")
         options.add_argument("disable-infobars")
         options.add_argument('ignore-certificate-errors')
+        #options.add_argument('--no-sandbox')
+        options.add_argument("--headless")
         options.add_experimental_option("detach", True)
         driver = webdriver.Chrome(executable_path=self.driver, options=options)
         driver.maximize_window()
