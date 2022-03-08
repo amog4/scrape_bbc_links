@@ -48,7 +48,7 @@ class Scraper():
 
 
    
-
+file = 'bbc_links_test_03.xlsx'
 scraper =  Scraper(driver = driver_loc)
 d = scraper.launch_driver()
 scraper.open_website(website='https://www.bbc.com/')
@@ -61,8 +61,8 @@ for h in links:
     ref.add(h.get('href'))
 
 df = pd.DataFrame({'ref':list(ref)})
-workbook = load_workbook('bbc_links_test_03.xlsx')
-writer  =  pd.ExcelWriter('bbc_links_test_03.xlsx',engine = 'openpyxl')
+workbook = load_workbook(file)
+writer  =  pd.ExcelWriter(file,engine = 'openpyxl')
 writer.book = workbook 
 df.to_excel(writer, sheet_name = 'links',index=False)
 
